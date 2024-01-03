@@ -13,11 +13,15 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 // Frontend
-public class RockPaperGUI extends JFrame {
+public class RockPaperGUI extends JFrame implements ActionListener {
 	
 	JButton rockBtn, paperBtn, scissorBtn;
 	
 	JLabel computerChoice;
+	
+	JLabel computerScoreLabel, playerScoreLabel;
+	
+	RockPaper rockPaper;
 	
 	public RockPaperGUI() {
 		super("Rock Paper Game");
@@ -30,12 +34,14 @@ public class RockPaperGUI extends JFrame {
 		
 		setLocationRelativeTo(null);
 		
+		rockPaper = new RockPaper();
+		
 		addGuiComponents();
 	}
 
 	private void addGuiComponents() {
 		// TODO Auto-generated method stub
-		JLabel computerScoreLabel = new JLabel ("Computer: 0");
+		computerScoreLabel = new JLabel ("Computer: 0");
 		computerScoreLabel.setBounds(0, 43, 450, 30);
 		computerScoreLabel.setFont(new Font("Dialog" , Font.BOLD, 26));
 		computerScoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -48,7 +54,7 @@ public class RockPaperGUI extends JFrame {
 		computerChoice.setBorder(BorderFactory.createLineBorder(Color.pink));
 		add(computerChoice);
 		
-		JLabel playerScoreLabel = new JLabel ("Player: 0");
+		playerScoreLabel = new JLabel ("Player: 0");
 		playerScoreLabel.setBounds(0, 317, 450, 30);
 		playerScoreLabel.setFont(new Font("Dialog" , Font.BOLD, 26));
 		playerScoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -57,19 +63,21 @@ public class RockPaperGUI extends JFrame {
 		rockBtn = new JButton("Rock");
 		rockBtn.setBounds(40, 387, 105, 80);
 		rockBtn.setFont(new Font("Dialog" , Font.PLAIN, 18));
+		rockBtn.addActionListener(this);
 		add(rockBtn);
 		
 		paperBtn = new JButton("Paper");
 		paperBtn.setBounds(165, 387, 105, 80);
 		paperBtn.setFont(new Font("Dialog" , Font.PLAIN, 18));
+		paperBtn.addActionListener(this);
 		add(paperBtn);
 		
 		scissorBtn = new JButton("Scissor");
 		scissorBtn.setBounds(290, 387, 105, 80);
 		scissorBtn.setFont(new Font("Dialog" , Font.PLAIN, 18));
+		scissorBtn.addActionListener(this);
 		add(scissorBtn);
-		
-		showDialog("Test Meesage");
+
 		
 	}
 	
@@ -99,5 +107,25 @@ public class RockPaperGUI extends JFrame {
 		
 		resultDialog.setLocationRelativeTo(this);
 		resultDialog.setVisible(true);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// get Player Choice
+		String playerChoice = e.getActionCommand().toString();
+		
+		// play Rock Paper Scisscors and store result into string
+		
+		String result = rockPaper.playRockPaper(playerChoice);
+		
+		// Load Computer's Choice
+		computerChoice.setText(rockPaper.getComputerChoice());
+		
+		// Update Score
+		computerScoreLabel.setText("Computer: " + rockPaper.getComputerScore());
+		playerScoreLabel.setText("Player: " + rockPaper.getPlayerScore());
+		
+		// Display Result Dialog
+		showDialog(result);
 	}
 }
